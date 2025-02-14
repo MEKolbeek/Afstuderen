@@ -8,13 +8,16 @@ import unicodedata
 API_URL = "http://localhost:11434/api/generate"
 MODEL_NAME = "llama3.2"
 
+# Functie om tekst te normaliseren (speciale tekens verwijderen)
+def normalize_text(text):
+    if isinstance(text, str):
+        text = unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore').decode('utf-8')
+        return text.strip()
+    return ""
+
 # Functie om citaten te normaliseren
 def preprocess_citation(citation):
-    if isinstance(citation, str):
-        citation = unicodedata.normalize('NFKD', citation).encode('ASCII', 'ignore').decode('utf-8')
-        citation = citation.replace("\n", " ").strip()
-        return citation
-    return "Geen citaat beschikbaar"
+    return normalize_text(citation)
 
 # Functie om een prompt naar LLaMA te sturen en de response te verwerken
 def query_llama(prompt):
@@ -39,7 +42,7 @@ def query_llama(prompt):
                 except json.JSONDecodeError:
                     print(f"Fout bij verwerken van regel: {line}")
 
-        return full_text.strip()
+        return normalize_text(full_text.strip())  # Normaliseer output voor opslag
     except requests.exceptions.RequestException as e:
         return f"Fout: {e}"
     except json.JSONDecodeError:
@@ -49,20 +52,25 @@ def query_llama(prompt):
 def generate_keywords_from_citation(citation):
     if isinstance(citation, str):
         prompt = (
-            f"Hier is een citaat:\n\n{citation}\n\n"
-            "Kies 1, 2 of 3 kernwoorden die op basis van de context van de citaat deze het beste omschrijven. "
-            "Geef de kernwoorden terug als een lijst gescheiden door komma's, zonder extra tekst."
-        )
+        f"Hier is een citaat:\n\n{citation}\n\n"
+        "Kies 1, 2 of 3 kernwoorden die op basis van de context van dit citaat het beste de inhoud omschrijven. "
+        "Vermijd te algemene woorden zoals 'crimineel', 'logistiek' of 'vervoer'. "
+        "Gebruik gestandaardiseerde termen zodat vergelijkbare begrippen dezelfde naam krijgen. "
+        "Geef GEEN plaatsnamen, landen of provincies terug. "
+        "Geef Geen getallen of werkwoorden terug"
+        "Geef GEEN dubbele kernwoorden in hetzelfde citaat. "
+        "Geef de kernwoorden terug als een lijst gescheiden door komma's, zonder extra tekst."
+    )
         response = query_llama(prompt)
 
-        # Splits de kernwoorden correct op komma's en verwijder eventuele extra spaties
-        keywords = [kw.strip() for kw in response.split(",") if kw.strip()]
+        # Splits de kernwoorden correct op komma's en verwijder eventuele extra spaties en tekens
+        keywords = [normalize_text(kw.strip()) for kw in response.split(",") if kw.strip()]
         return keywords[:3]  # Maximaal 3 kernwoorden
     return ["", "", ""]  # Lege waarden voor het geval er geen kernwoorden zijn
 
 # Start van het script
 if __name__ == "__main__":
-    input_file = r"C:\Users\mkolb\Downloads\PESTEL-MASTER-normtest.xlsx"
+    input_file = r"C:\Users\mkolb\Downloads\infrabeeld_totaal1.xlsx"
     output_directory = r"C:\Users\mkolb\Downloads"
     
     if not os.path.exists(input_file):
