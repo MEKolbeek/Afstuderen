@@ -186,6 +186,207 @@ def build_context_hints(active_packs: list, max_hints: int = 100) -> list:
     return out
 
 # ======================
+# Volatile context extractie (LLM + regex)
+# ======================
+
+LICENSE_PLATE_PATTERNS = [
+    r"\b[A-Z]{2}-\d{3}-[A-Z]\b",
+    r"\b\d{2}-[A-Z]{3}-\d\b",
+    r"\b[A-Z]{2}-\d{2}-[A-Z]{2}\b",
+    r"\b\d{2}-[A-Z]{2}-\d{2}\b",
+    r"\b[A-Z]{2}-\d{2}-\d{2}\b",
+    r"\b\d{3}-[A-Z]{2}-[A-Z]\b",
+]
+
+PHONE_PATTERNS = [
+    r"\b(?:\+31\s?6\s?\d{8}|06[-\s]?\d{8})\b",
+]
+
+DOB_PATTERNS = [
+    r"\b(\d{2}-\d{2}-\d{4})\b",
+    r"\b(\d{4}-\d{2}-\d{2})\b",
+]
+
+IBAN_PATTERN = r"\bNL\d{2}[A-Z]{4}\d{10}\b"
+
+
+def _regex_extract_basic_entities(text: str) -> dict:
+    out = {
+        "license_plates": [],
+        "phone_numbers": [],
+        "dob_candidates": [],
+        "ibans": [],
+    }
+    for pat in LICENSE_PLATE_PATTERNS:
+        out["license_plates"] += re.findall(pat, text)
+    for pat in PHONE_PATTERNS:
+        out["phone_numbers"] += re.findall(pat, text)
+    for pat in DOB_PATTERNS:
+        out["dob_candidates"] += re.findall(pat, text)
+    out["ibans"] += re.findall(IBAN_PATTERN, text)
+    # dedupe
+    for k in out:
+        seen = set()
+        dedup = []
+        for v in out[k]:
+            if v not in seen:
+                seen.add(v)
+                dedup.append(v)
+        out[k] = dedup
+    return out
+
+
+VOLATILE_PROMPT_HEADER = (
+    "Je krijgt een tekst uit een politiedossier met paginamarkers [Pagina N].\n"
+    "Extraheer uitsluitend wat letterlijk in de tekst staat en geef gestructureerde JSON terug.\n"
+    "Gebruik géén interpretatie of afleiding; alleen tekst die aanwezig is.\n\n"
+    "Output: één JSON-object, geen extra tekst. Velden:\n"
+    "- persons: [{name, role (verdachte|getuige|slachtoffer|overig), dob (YYYY-MM-DD of null), aliases:[], doc: string, page: number|null}]\n"
+    "- locations: [{name, type (adres|plaats|object|null), doc, page}]\n"
+    "- vehicles: [{license_plate, brand: string|null, model: string|null, doc, page}]\n"
+    "- phones: [{number, owner: string|null, doc, page}]\n"
+    "- offenses: [{label, pack_id: string|null, doc, evidence_pages: [numbers]}]\n"
+    "- organizations: [{name, type: string|null, doc, page}]\n"
+    "Regels:\n"
+    "- Neem waar mogelijk paginanummers over via [Pagina N].\n"
+    "- Laat velden weg als er niets over te vinden is.\n"
+)
+
+
+def _build_volatile_prompt(pdf_title: str, pdf_text_chunk: str) -> str:
+    return (
+        f"DOCUMENT: {pdf_title}\n\n" +
+        VOLATILE_PROMPT_HEADER +
+        "\nTEKST START\n" + pdf_text_chunk + "\nTEKST EINDE"
+    )
+
+
+def _safe_json_parse(s: str) -> dict:
+    try:
+        obj = json.loads(s.strip())
+        if isinstance(obj, dict):
+            return obj
+    except Exception:
+        pass
+    return {}
+
+
+def _merge_volatile(into: dict, add: dict) -> dict:
+    for key in ["persons", "locations", "vehicles", "phones", "offenses", "organizations"]:
+        base = into.setdefault(key, [])
+        items = add.get(key) or []
+        for it in items:
+            t = json.dumps(it, sort_keys=True, ensure_ascii=False)
+            if not any(json.dumps(x, sort_keys=True, ensure_ascii=False) == t for x in base):
+                base.append(it)
+    for key in ["license_plates", "phone_numbers", "dob_candidates", "ibans"]:
+        if add.get(key):
+            base = into.setdefault(key, [])
+            for v in add[key]:
+                if v not in base:
+                    base.append(v)
+    return into
+
+
+def _chunk_by_chars(text: str, max_chars: int = 12000) -> list:
+    chunks = []
+    current = []
+    total = 0
+    for line in text.splitlines(True):
+        ln = len(line)
+        if total + ln > max_chars and current:
+            chunks.append("".join(current))
+            current = []
+            total = 0
+        current.append(line)
+        total += ln
+    if current:
+        chunks.append("".join(current))
+    return chunks
+
+
+def extract_volatile_context_for_doc(pdf_name: str, pdf_text: str) -> dict:
+    result = {}
+    regex_baseline = _regex_extract_basic_entities(pdf_text)
+    result = _merge_volatile(result, regex_baseline)
+    for chunk in _chunk_by_chars(pdf_text, max_chars=12000):
+        prompt = _build_volatile_prompt(pdf_name, chunk)
+        raw = post_chat([{"role": "user", "content": prompt}], timeout=180, stream=False)
+        parsed = _safe_json_parse(raw)
+        if parsed:
+            result = _merge_volatile(result, parsed)
+    return result
+
+
+def write_volatile_json(target_path: str, data: dict) -> None:
+    with open(target_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def secure_delete(path: str, passes: int = 1) -> None:
+    try:
+        if not os.path.exists(path):
+            return
+        size = os.path.getsize(path)
+        with open(path, "r+b") as f:
+            for _ in range(max(1, passes)):
+                f.seek(0)
+                f.write(b"\x00" * size)
+                f.flush()
+                os.fsync(f.fileno())
+        os.remove(path)
+    except Exception:
+        try:
+            os.remove(path)
+        except Exception:
+            pass
+
+
+def build_hints_from_volatile(data: dict, max_terms: int = 50) -> list:
+    terms = []
+    for p in data.get("persons", []):
+        if p.get("name"):
+            terms.append(str(p["name"]))
+        for a in p.get("aliases", []) or []:
+            terms.append(str(a))
+    for l in data.get("locations", []):
+        if l.get("name"):
+            terms.append(str(l["name"]))
+    for v in data.get("vehicles", []):
+        if v.get("license_plate"):
+            terms.append(str(v["license_plate"]))
+        if v.get("brand"):
+            terms.append(str(v["brand"]))
+        if v.get("model"):
+            terms.append(str(v["model"]))
+    for ph in data.get("phones", []):
+        if ph.get("number"):
+            terms.append(str(ph["number"]))
+    for off in data.get("offenses", []):
+        if off.get("label"):
+            terms.append(str(off["label"]))
+        if off.get("pack_id"):
+            terms.append(str(off["pack_id"]))
+    for raw in data.get("license_plates", []):
+        terms.append(str(raw))
+    for raw in data.get("phone_numbers", []):
+        terms.append(str(raw))
+    seen = set()
+    out = []
+    for t in terms:
+        t2 = t.strip()
+        if not t2:
+            continue
+        low = t2.lower()
+        if low in seen:
+            continue
+        seen.add(low)
+        out.append(t2)
+        if len(out) >= max_terms:
+            break
+    return out
+
+# ======================
 # Parsing en schoonmaak
 # ======================
 
@@ -380,7 +581,37 @@ def main(pdf_dir: str, vraag: str):
     ctx_dir = os.getenv("CONTEXT_DIR", os.path.join(os.getcwd(), "context"))
     corpus_sample = get_corpus_sample_text(pdf_dir, max_pages=2, max_chars=30000)
     common, active_packs = load_context_packs(ctx_dir, vraag, corpus_sample)
-    hints = build_context_hints(active_packs) if active_packs else None
+    hints = build_context_hints(active_packs) if active_packs else []
+
+    # 0b) Volatile context extractie en opslag
+    volatile_path = os.path.join(pdf_dir, ".volatile_context.json")
+    aggregate = {}
+    try:
+        pdfs = [f for f in os.listdir(pdf_dir) if f.lower().endswith(".pdf")]
+        for pdf in pdfs:
+            path = os.path.join(pdf_dir, pdf)
+            try:
+                text = extract_text_from_pdf(path)
+            except Exception as e:
+                print(f"[!] Kon {pdf} niet lezen voor context-extractie: {e}")
+                continue
+            per_doc = extract_volatile_context_for_doc(os.path.basename(pdf), text)
+            aggregate = _merge_volatile(aggregate, per_doc)
+        write_volatile_json(volatile_path, aggregate)
+    except Exception as e:
+        print(f"[!] Context-extractie fout: {e}")
+
+    # 0c) Hints uitbreiden met volatile entiteiten
+    if aggregate:
+        hints_vol = build_hints_from_volatile(aggregate)
+        seen = set()
+        merged = []
+        for h in list(hints) + hints_vol:
+            k = h.lower()
+            if k not in seen:
+                seen.add(k)
+                merged.append(h)
+        hints = merged
 
     # 1) Alle citaten
     alle_citaten = extract_citaten_from_dir(pdf_dir, vraag, hints=hints)
@@ -409,6 +640,12 @@ def main(pdf_dir: str, vraag: str):
     print(antwoord)
     print("\n=== CSV met bewijscitaten ===")
     print(csv_path)
+
+    # 6) Volatile JSON veilig verwijderen i.v.m. WPG
+    try:
+        secure_delete(volatile_path, passes=1)
+    except Exception:
+        pass
 
 if __name__ == "__main__":
     # Pas deze twee aan
