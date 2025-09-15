@@ -1,0 +1,112 @@
+{
+  "id": "drugs",
+  "label": "Opiumwetdelicten",
+  "mapping_triggers": [
+    "drugs", "cocaïne", "coke", "crack", "base", "heroïne", "H", "speed", "amfetamine", "meth",
+    "mdma", "xtc", "pillen", "ketamine", "gbl", "ghb", "hennep", "wiet", "cannabis", "hasj",
+    "kwekerij", "drugslab", "handel", "deal", "koerier", "transport", "container", "uithaler",
+    "rip-on", "rip-off", "stash", "gripzakjes", "bolletjes", "ponypacks", "capsules", "plakken",
+    "bricks", "kilo", "keys", "panelas", "perico", "blanca", "harina", "mercancía", "doos bananen"
+  ],
+  "ontology": [
+    {
+      "id": "handel_harddrugs",
+      "label": "Handel harddrugs",
+      "articles": ["Opiumwet art. 2"],
+      "synonyms": [
+        "deal", "dealen", "verkopen", "verhandelen", "afleveren", "bezorgen", "leveren", "omzetten",
+        "runners", "tussenpersoon", "middenman", "klantenlijst", "afnemers", "bestellingen",
+        "prijzen/gram", "steekwoorden coke", "ponypacks", "gripzakjes", "bolletjes", "capsules",
+        "plugs", "cutten", "persen", "persblok", "crack", "base", "snuif", "poeder",
+        "samples", "stash", "stashlocatie", "safehouse",
+        "frontstore", "dekmantelbedrijf", "horeca als afzetkanaal",
+        "telefoon voor deals", "dealtelefoon", "anonieme sim", "crypto-afrekening",
+        "cashbetaling", "contant afgerekend", "wisselkoers per gram",
+        "wholesale", "kilo-handel", "keys", "bricks", "panelas",
+        "perico", "blanca", "harina", "merca", "polvo",
+        "lijn trekken", "gebruikershoeveelheid", "straathandel", "bezorgdienst",
+        "versluierde taal", "emojis voor drugs", "lijst met codewoorden"
+      ],
+      "indicators": [
+        "verdeelde porties", "codetaal voor soorten/hoeveelheden", "frequente korte ontmoetingen",
+        "berichten met prijzen en hoeveelheden", "observaties overdrachten",
+        "contante geldstromen zonder herkomst", "gebruik transport- of runnersnetwerk",
+        "afspraken bij hotspots", "klantenbeheer via chat"
+      ],
+      "regexes": {
+        "hoeveelheden": "\\b(gram|gr|g|ounce|oz|kilo|kg|key|keys|kilo's|halve|kwart)\\b",
+        "cocaine_terms": "\\b(coke|coca[ií]ne|perico|blanca|harina|merca|polvo|bricks?|panelas?)\\b",
+        "verpakking": "\\b(ponypacks?|gripzakjes?|bolletjes?|capsules?|plugs?)\\b"
+      }
+    },
+    {
+      "id": "bezit_harddrugs",
+      "label": "Bezitsdelict harddrugs",
+      "articles": ["Opiumwet art. 2"],
+      "synonyms": [
+        "bij zich hebben cocaïne", "zakje coke", "bolletjes bij zich", "capsules bij zich",
+        "heroïne bezit", "crackpijp", "spiegel en kaartje", "scheermesje met poeder",
+        "snufjes", "lijnen", "wraps", "ponypack aangetroffen", "stash in kleding",
+        "geheime bergplaats voertuig", "professionele verstopplek",
+        "veldtest positief", "NFI positief", "drugshond slaat aan"
+      ],
+      "indicators": [
+        "positieve test narcotica", "kenmerkende verpakking", "drugstoebehoren",
+        "contant geld in kleine coupures", "gebruikersmateriaal", "zakweegschaal"
+      ]
+    },
+    {
+      "id": "import_export_drugs",
+      "label": "In-/uitvoer harddrugs",
+      "articles": ["Opiumwet art. 2"],
+      "synonyms": [
+        "invoer", "uitvoer", "smokkel via container", "uithalers", "terminal", "reefer",
+        "douane onderschept", "rip-on", "rip-off", "verzegeling", "containerseal",
+        "lashing/securing", "verstop in lading", "fruitcontainer", "bananen",
+        "rotterdamse haven", "antwerpen haven", "loods", "overslag",
+        "bodypackers", "bolletjesslikkers", "courier", "postpakket",
+        "luchtpost", "pakkettenservice", "valspapieren bij zending",
+        "maritieme route", "goederenstroom misbruikt", "uithaalplan"
+      ],
+      "indicators": [
+        "containerbewegingen afwijkend", "terminalbezoeken buiten werktijd",
+        "onverklaarbare toegangspassen", "vervalste seals/labels",
+        "affiniteit met fruit/verse lading", "contact met havenmedewerkers",
+        "douane-hits/scan-afwijkingen"
+      ]
+    },
+    {
+      "id": "teelt_hennep",
+      "label": "Teelt hennep",
+      "articles": ["Opiumwet art. 3"],
+      "synonyms": [
+        "kwekerij", "hennepplantage", "growshop", "plantjes", "knipafval",
+        "assimilatielampen", "koolstoffilter", "tijdschakelaar", "voeding A+B",
+        "stekken", "moederplanten", "wietlucht", "warmtebeeld", "illegale aftap",
+        "kweekruimte", "tent", "growtent", "wietdroogrek", "hydro",
+        "smartshop", "pollen", "hash", "butaanextractie (BHO)"
+      ],
+      "indicators": [
+        "professionele opstelling", "indicatie eerdere oogsten", "illegale stroomvoorziening",
+        "warmtesporen", "afgeplakte ramen", "condensvorming", "zoemgeluid ventilatie"
+      ]
+    },
+    {
+      "id": "synthetische_drugslabs",
+      "label": "Productie synthetische drugs",
+      "articles": ["Opiumwet art. 2/3"],
+      "synonyms": [
+        "drugslab", "amfetaminelab", "mdma-lab", "meth-lab", "refluxketel",
+        "destillatie", "roerwerken", "vaten", "IBC", "glaswerk", "mantelpan",
+        "maskeringsmiddelen", "pre-precursors", "BMK", "PMK", "APAA", "P2P",
+        "dumping chemisch afval", "ammoniakgeur", "azijnzuur", "zoutzuur",
+        "rode fosfor", "lithium strips", "solvents"
+      ],
+      "indicators": [
+        "chemische geur", "beschadigde vegetatie", "vaten/glaswerk aanwezig",
+        "persoonlijke beschermingsmiddelen", "afgelegen loods", "onverklaarde nachtactiviteit"
+      ]
+    }
+  ]
+}
+

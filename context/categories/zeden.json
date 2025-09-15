@@ -1,0 +1,67 @@
+{
+  "id": "zeden",
+  "label": "Zedendelicten",
+  "mapping_triggers": [
+    "verkrachting", "aanranding", "zeden", "seksueel misbruik", "grooming", "ontucht", "naaktbeelden",
+    "dwang", "ongewenste intimiteiten", "seks tegen wil", "minderjarige", "sextortion", "voyeurisme",
+    "aanranding in uitgaansleven", "indecent", "nudes", "doxing met naakt", "exposeren"
+  ],
+  "ontology": [
+    {
+      "id": "verkrachting",
+      "label": "Verkrachting",
+      "articles": ["Sr 242"],
+      "synonyms": [
+        "seks tegen haar wil", "tegen zijn wil", "gedwongen seks", "penetratie zonder toestemming",
+        "overmeesterd en verkracht", "onder dwang gemeenschap", "niet instemmend seksueel contact",
+        "naar binnen gedrongen", "geforceerde gemeenschap"
+      ],
+      "indicators": [
+        "geweld/bedreiging", "onmacht/weerloosheid", "geen instemming", "forensisch spoor",
+        "directe melding of aangifte", "consistentie in verklaringen"
+      ]
+    },
+    {
+      "id": "aanranding",
+      "label": "Aanranding",
+      "articles": ["Sr 246"],
+      "synonyms": [
+        "onzedelijk betasten", "aanraken borsten/billen", "hand in broek", "tongzoen afdwingen",
+        "op ongepaste wijze vastgepakt", "seksueel grensoverschrijdend gedrag", "aanrander",
+        "klemgezet en betast", "vingeren tegen wil"
+      ],
+      "indicators": [
+        "seksuele handelingen zonder instemming", "kort geweld of dwang", "verklaring slachtoffer",
+        "getuigen in uitgaansgelegenheid", "CCTV-ondersteuning"
+      ]
+    },
+    {
+      "id": "grooming_kindermisbruik",
+      "label": "Grooming / Kindermisbruik",
+      "articles": ["Sr 248e", "Sr 247-250"],
+      "synonyms": [
+        "benaderen minderjarige", "verleiden online", "naaktfoto's vragen", "exploiteren minderjarige",
+        "afspraken maken voor seks", "kinderporno produceren", "verspreiden kinderpornografisch materiaal",
+        "CSAM", "child sexual abuse material", "catfishing", "sugar daddy tegen nudes"
+      ],
+      "indicators": [
+        "chatlogs met minderjarige", "expliciete verzoeken", "uitwisseling beeldmateriaal",
+        "afspraak voor ontmoeting", "ouderlijk toezicht omzeild"
+      ]
+    },
+    {
+      "id": "sextortion_voyeurisme",
+      "label": "Sextortion / Voyeurisme",
+      "articles": ["Sr 248d", "Sr 139f"],
+      "synonyms": [
+        "afpersen met naaktbeelden", "dreigen met verspreiding", "stiekem gefilmd",
+        "verborgen camera", "onlyfans afpersing", "revenge porn", "wraakporno"
+      ],
+      "indicators": [
+        "chantage met beeldmateriaal", "cryptobetalingsverzoek", "verspreiding via socials",
+        "bewijsvideo's en logs"
+      ]
+    }
+  ]
+}
+

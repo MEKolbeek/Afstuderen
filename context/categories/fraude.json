@@ -1,0 +1,66 @@
+{
+  "id": "fraude",
+  "label": "Fraude/valsheid/financieel",
+  "mapping_triggers": [
+    "oplichting", "fraude", "valsheid in geschrift", "identiteitsfraude", "phishing", "bankhelpdesk",
+    "belastingfraude", "subsidiefraude", "factuurfraude", "crypto scam", "ponzi", "pump and dump",
+    "ceo-fraude", "vriend-in-nood", "tikkie-fraude", "marktplaatsfraude", "refund scam"
+  ],
+  "ontology": [
+    {
+      "id": "oplichting",
+      "label": "Oplichting",
+      "articles": ["Sr 326"],
+      "synonyms": [
+        "misleiden voor geld", "babbeltruc", "marktplaatsfraude", "nepverkoper", "voorschotfraude",
+        "spoofing", "helpdeskfraude", "vriend-in-nood", "CEO-fraude", "refund scam",
+        "betaalverzoek-fraude", "tikkie-truc", "phishinglink", "sms-phishing", "bankmedewerker impostor"
+      ],
+      "indicators": [
+        "valse hoedanigheid", "listige kunstgrepen", "samenweefsel van verdichtsels",
+        "geld naar geldezel-rekening", "snel pinnen en opnemen", "prepaid/crypto-laundering"
+      ]
+    },
+    {
+      "id": "valsheid_in_geschrift",
+      "label": "Valsheid in geschrift",
+      "articles": ["Sr 225"],
+      "synonyms": [
+        "valse facturen", "vervalste loonstrook", "valse ID", "fake contracten",
+        "aangepaste bankafschriften", "documentmanipulatie", "forgery", "IBAN-wijzigingsfraude",
+        "ghost employees", "spookfacturen", "fictieve inkoop"
+      ],
+      "indicators": [
+        "onwaarheden in stukken", "wijzigingen met correctietool", "onmogelijke data",
+        "handtekening mismatch", "metadata inconsistenties"
+      ]
+    },
+    {
+      "id": "identiteitsfraude",
+      "label": "Identiteitsfraude",
+      "articles": ["Sr 231"],
+      "synonyms": [
+        "ID misbruik", "BSN misbruik", "rekeningovername", "SIM-swapping", "account takeover",
+        "deepfake ID", "gestolen persoonsgegevens", "credential stuffing", "social engineering"
+      ],
+      "indicators": [
+        "inloggen als ander", "telecom-verplaatsing", "2FA omzeild", "adreswijzigingen ongewenst",
+        "devices en IP’s afwijkend"
+      ]
+    },
+    {
+      "id": "belasting_subsidie_fraude",
+      "label": "Belasting-/subsidiefraude",
+      "articles": ["AWR", "Sr 225/326"],
+      "synonyms": [
+        "onterecht aftrek", "BTW carrousel", "subsidies misbruikt", "schijnzelfstandigen",
+        "brievenbusfirma", "omzet verdraaid", "kosten fictief", "cash omzet niet opgegeven"
+      ],
+      "indicators": [
+        "onzakelijke transacties", "vals personeel", "onverklaarbare geldstromen",
+        "keten met schijnbedrijven", "fiscale inconsistenties"
+      ]
+    }
+  ]
+}
+

@@ -1,0 +1,89 @@
+{
+  "id": "geweld",
+  "label": "Geweldsdelicten",
+  "mapping_triggers": [
+    "geweld", "mishandeling", "zware mishandeling", "openlijk geweld", "bedreiging",
+    "vechtpartij", "beroving", "overval", "agressie", "pak rammel", "klappen", "trap", "duw",
+    "letsels", "blauwe plekken", "kneuzing", "bloed", "pijn", "verwonding", "stomp", "kopstoot"
+  ],
+  "ontology": [
+    {
+      "id": "mishandeling",
+      "label": "Mishandeling",
+      "articles": ["Sr 300"],
+      "synonyms": [
+        "mishandeling", "geslagen", "sloeg", "slaan", "klap", "vuistslag", "stompte", "stompen",
+        "schopte", "schoppen", "trapte", "duwde hard", "tegen de grond gewerkt", "neergeslagen",
+        "kopstoot", "ramde", "strafbare mishandeling", "pak rammel", "herhaaldelijk slaan",
+        "fysiek geweld", "in elkaar geslagen", "rukte en trok", "aan haren getrokken"
+      ],
+      "indicators": [
+        "slachtoffer verklaart pijn of letsel", "getuige ziet slaan of schoppen",
+        "zichtbaar letsel", "geneeskundige verklaring", "geluidsopname van geschreeuw/klappen",
+        "forensische foto’s van letsel"
+      ],
+      "injury_markers": [
+        "pijn", "blauwe plek", "kneuzing", "zwelling", "snijwond", "scheurwond", "bloed",
+        "schrammen", "tandletsel", "hoofdpijn", "nekpijn", "dokter", "EHBO"
+      ],
+      "regexes": {
+        "geweldswerkwoord": "\\b(slaan|sloeg|geslagen|stomp(te|en)?|schop(te|pen)?|trap(te|pen)?|duw(de)?|kopstoot|vuistslag|ram(de|men)?)\\b"
+      }
+    },
+    {
+      "id": "zware_mishandeling",
+      "label": "Zware mishandeling",
+      "articles": ["Sr 302"],
+      "synonyms": [
+        "zware mishandeling", "ernstig letsel", "zwaar lichamelijk letsel", "blijvend letsel",
+        "botbreuk", "fractuur", "gebroken neus", "gebroken kaak", "hersenschudding",
+        "hersenletsel", "schedelbreuk", "oogkasfractuur", "operatie noodzakelijk", "verblijf ziekenhuis"
+      ],
+      "indicators": [
+        "medisch vastgesteld zwaar letsel", "langdurig herstel", "blijvende beperkingen",
+        "heftige geweldsinwerking", "gericht op vitale delen"
+      ]
+    },
+    {
+      "id": "openlijk_geweld",
+      "label": "Openlijk geweld",
+      "articles": ["Sr 141"],
+      "synonyms": [
+        "openlijk geweld", "geweld in groepsverband", "groepsgeweld", "vechtpartij op straat",
+        "openbaar geweld", "rellen", "samen geweld plegen", "in vereniging", "meerdere daders",
+        "straatgevecht", "uit de hand gelopen ruzie"
+      ],
+      "indicators": [
+        "openbare ruimte", "meerdere personen", "gezamenlijk geweld", "rollenverdeling (aanjager/plegers)"
+      ]
+    },
+    {
+      "id": "bedreiging",
+      "label": "Bedreiging",
+      "articles": ["Sr 285"],
+      "synonyms": [
+        "met de dood bedreigd", "ik maak je af", "ik vermoord je", "ik steek je neer",
+        "ik sla je in elkaar", "dreigde te", "bedreigde met geweld", "intimidatie",
+        "bang gemaakt", "afpersende dreigtaal"
+      ],
+      "indicators": [
+        "expliciete dreigtaal", "gericht op persoon", "redelijke vrees bij slachtoffer",
+        "middel getoond (mes/wapen)"
+      ],
+      "weapon_markers": ["mes getoond", "vuurwapen getoond", "bestormde met voorwerp"]
+    },
+    {
+      "id": "poging_doodslag",
+      "label": "Poging doodslag",
+      "articles": ["Sr 45 jo 287"],
+      "synonyms": [
+        "poging doodslag", "trachtte te doden", "op vitale delen gestoken", "met auto ingereden",
+        "wurging", "met mes ingestoken", "sloeg met zwaar voorwerp op hoofd", "levensgevaarlijk handelen"
+      ],
+      "indicators": [
+        "aanmerkelijke kans op de dood", "opzet of voorwaardelijk opzet", "heftig geweld op vitale plaatsen"
+      ]
+    }
+  ]
+}
+

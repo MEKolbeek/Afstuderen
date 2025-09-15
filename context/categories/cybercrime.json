@@ -1,0 +1,87 @@
+{
+  "id": "cybercrime",
+  "label": "Cybercrime (incl. cryptocurrency)",
+  "mapping_triggers": [
+    "hack", "computervredebreuk", "inbraak systeem", "phishing", "spoofing", "ddos", "ransomware",
+    "malware", "botnet", "skimming", "credential stuffing", "darkweb", "cryptowallet", "seed phrase",
+    "private key", "mnemonic", "exchange", "CEX", "DEX", "P2P", "OTC", "mixer", "tumbler", "coinjoin",
+    "tornado", "wasabi", "samourai", "monero", "xmr", "zcash", "crypto cash-out", "bridge", "chain hop",
+    "USDT", "USDC", "BTC", "ETH", "TRX", "BSC", "ERC20", "TRC20", "BEP20"
+  ],
+  "ontology": [
+    {
+      "id": "computervredebreuk",
+      "label": "Computervredebreuk",
+      "articles": ["Sr 138ab"],
+      "synonyms": [
+        "ongeautoriseerde toegang", "inbreken op systeem", "bruteforce", "credential stuffing",
+        "SQL injection", "RCE", "LFI/RFI", "webshell", "reverse shell", "C2-verbinding",
+        "initial access broker", "phishing naar creds", "MFA omzeilen", "SIM-swapping"
+      ],
+      "indicators": [
+        "vreemde loginpatronen", "privilege escalation", "exfiltratie sporen", "persistente beacons",
+        "logmanipulatie", "backdoor accounts"
+      ]
+    },
+    {
+      "id": "ransomware_afpersing",
+      "label": "Ransomware/afpersing",
+      "articles": ["Sr 161sexies", "Sr 317"],
+      "synonyms": [
+        "versleuteld netwerk", "losgeld geëist", "double extortion", "datadiefstal en encryptie",
+        "locker", "wiper", "decryptor tegen betaling", "ransom note", "leak site", "TOR portal"
+      ],
+      "indicators": [
+        "encryptie-artefacten", "exfil sporen", "cryptowallet adres", "losgeld communicatie"
+      ]
+    },
+    {
+      "id": "crypto_misbruik",
+      "label": "Crypto misbruik / witwassen",
+      "articles": ["Sr 420bis/ter/quater"],
+      "synonyms": [
+        "wallet", "adres", "public key", "private key", "seed phrase", "mnemonic", "hardware wallet",
+        "ledger", "trezor", "paper wallet", "metamask", "trustwallet", "cex account", "no-KYC exchange",
+        "p2p-escrow", "otc desk", "voucher", "giftcard naar crypto", "atm crypto", "mixen", "tumbler",
+        "coinjoin", "batches splitsen", "peel chain", "dusting", "chain hop", "bridge", "DEX swap",
+        "AMM", "liquidity pool", "router", "wrapped tokens", "privacy coins", "XMR", "Monero", "ZEC",
+        "shielded", "stealth addresses", "view keys"
+      ],
+      "indicators": [
+        "stortingen vanuit mixers", "opknippen en snel doorstorten", "korte levensduur wallets",
+        "cross-chain swapping", "DEX→CEX→P2P patroon", "TRC20 USDT cash-out", "monero tussenstap",
+        "herhaalde coinjoin participatie", "inconsistent KYC/identiteit"
+      ],
+      "regexes": {
+        "btc": "\\b(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}\\b",
+        "eth": "\\b0x[a-fA-F0-9]{40}\\b",
+        "tron_trc20": "\\bT[1-9A-HJ-NP-Za-km-z]{33}\\b",
+        "bsc_bep20": "\\b0x[a-fA-F0-9]{40}\\b",
+        "monero": "\\b4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}\\b"
+      },
+      "token_terms": [
+        "BTC", "ETH", "USDT", "USDC", "DAI", "TRX", "BNB", "MATIC", "XMR", "ZEC", "XRP",
+        "ERC20", "TRC20", "BEP20", "BRC20", "Lightning", "LNURL"
+      ],
+      "cex_dex_terms": [
+        "centralized exchange", "decentralized exchange", "CEX", "DEX", "KYC", "no-KYC",
+        "account freeze", "withdraw limit", "P2P marketplace", "OTC broker", "escrow"
+      ]
+    },
+    {
+      "id": "phishing_skimming",
+      "label": "Phishing/skimming",
+      "articles": ["Sr 326", "Sr 232"],
+      "synonyms": [
+        "valse bankmail", "spoofing", "smishing", "vishing", "lookalike domein",
+        "wallet drainers", "fake airdrops", "seed phrase phishing", "QR-truc",
+        "skimapparatuur", "overlay", "pincamera"
+      ],
+      "indicators": [
+        "phishingkit artefacten", "klacht over onterechte afschrijvingen",
+        "cryptotransacties naar bekende scam-adressen", "opnames via geldezels"
+      ]
+    }
+  ]
+}
+

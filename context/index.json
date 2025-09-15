@@ -1,0 +1,17 @@
+{
+  "version": "0.1.0",
+  "language": "nl-NL",
+  "packs": [
+    {"id": "geweld", "path": "categories/geweld.json"},
+    {"id": "drugs", "path": "categories/drugs.json"},
+    {"id": "wapens", "path": "categories/wapens.json"},
+    {"id": "zeden", "path": "categories/zeden.json"},
+    {"id": "witwassen", "path": "categories/witwassen.json"},
+    {"id": "diefstal", "path": "categories/diefstal.json"},
+    {"id": "smokkel", "path": "categories/smokkel.json"},
+    {"id": "fraude", "path": "categories/fraude.json"},
+    {"id": "cybercrime", "path": "categories/cybercrime.json"},
+    {"id": "mensenhandel", "path": "categories/mensenhandel.json"}
+  ]
+}
+
