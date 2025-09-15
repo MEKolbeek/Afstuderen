@@ -42,7 +42,8 @@ BASE_PROMPT = (
 
 ANSWER_HEADER = (
     "Je krijgt hieronder een gebruikersvraag en een set letterlijke citaten uit documenten. "
-    "Schrijf een uitgebreid, samenhangend antwoord voor een officier van justitie. "
+    "Schrijf een uitgebreid, samenhangend antwoord voor een rechercheur die het onderzoek doet. "
+    "Antwoord ALLEEN in het nederlands"
     "Gebruik alleen wat in de citaten staat. Geen speculatie. Geen informatie buiten de citaten. "
     "Verwijs in de lopende tekst kort naar documenttitel en paginanummer tussen haakjes, zoals (Titel, p. 12). "
     "Geen bulletlist tenzij noodzakelijk. Gewoon lopende tekst.\n\n"
@@ -52,6 +53,7 @@ SELECT_HEADER = (
     "Je krijgt de gebruikersvraag en het conceptantwoord plus alle gevonden citaten. "
     "Selecteer uitsluitend de citaten die daadwerkelijk iets toevoegen als bewijs voor het antwoord. "
     "Laat ruis weg. Kies beknopt maar volledig. Houd waar mogelijk variatie in bronnen.\n\n"
+    "Geef alleen directe citaten uit de bron. geef zelf geen invulling.\n"
     "Geef als JSON Lines, exact per regel:\n"
     "{\"citaat\":\"...\", \"pagina\": null, \"titel\":\"...\"}\n"
     "Geen extra tekst.\n"
