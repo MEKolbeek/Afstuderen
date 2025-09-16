@@ -510,6 +510,65 @@ def build_select_prompt(vraag: str, answer: str, citaten_blok: str) -> str:
 # Pipeline-stappen
 # ======================
 
+def _build_page_index(doc_text: str) -> list:
+    idx = []
+    for m in re.finditer(r"\[Pagina\s*(\d+)\]", doc_text):
+        try:
+            p = int(m.group(1))
+        except Exception:
+            p = None
+        idx.append((m.start(), p))
+    return idx
+
+def _page_for_pos(pos: int, page_idx: list) -> int | None:
+    if not page_idx:
+        return None
+    last = None
+    for i, p in page_idx:
+        if i <= pos:
+            last = p
+        else:
+            break
+    return last
+
+def _flex_regex_from_quote(quote: str) -> str:
+    q = quote.strip().strip('"“”\'\'')
+    # escape then allow flexible whitespace
+    q = re.escape(q)
+    q = re.sub(r"\\\s+", "\\s+", q)  # normalize any escaped whitespace groups
+    q = re.sub(r"\s+", "\\s+", q)
+    return q
+
+def enforce_exact_quotes_for_doc(parsed: list, doc_text: str, pdf_name: str) -> list:
+    page_idx = _build_page_index(doc_text)
+    verified = []
+    for it in parsed:
+        citaat = (it.get("citaat") or "").strip()
+        if not citaat:
+            continue
+        # build whitespace-flexible regex
+        pattern = _flex_regex_from_quote(citaat)
+        m = re.search(pattern, doc_text, flags=re.S)
+        if not m:
+            # try without ellipses if any
+            c2 = citaat.replace("…", " ").replace("...", " ")
+            pattern2 = _flex_regex_from_quote(c2)
+            m = re.search(pattern2, doc_text, flags=re.S)
+        if not m:
+            # reject unverifiable quote
+            continue
+        exact = doc_text[m.start():m.end()]
+        pagina = it.get("pagina")
+        if pagina is None:
+            pagina = _page_for_pos(m.start(), page_idx)
+        verified.append({
+            "citaat": exact,
+            "pagina": pagina,
+            "titel": it.get("titel") or pdf_name,
+            "document": pdf_name,
+        })
+    return verified
+
 def extract_citaten_from_dir(pdf_dir: str, vraag: str, hints: list | None = None) -> list:
     pdfs = [f for f in os.listdir(pdf_dir) if f.lower().endswith(".pdf")]
     alle = []
@@ -528,7 +587,9 @@ def extract_citaten_from_dir(pdf_dir: str, vraag: str, hints: list | None = None
             print(f"[!] API-fout bij {pdf}: {e}")
             continue
         parsed = parse_output(raw, pdf)
-        alle.extend(parsed)
+        # Enforce: only accept quotes that are exact substrings of the source text
+        verified = enforce_exact_quotes_for_doc(parsed, text, pdf)
+        alle.extend(verified)
     alle = filter_kleine_ruis(dedup_citaten(alle))
     return alle
 
