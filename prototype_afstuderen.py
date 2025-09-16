@@ -40,7 +40,7 @@ BASE_PROMPT = (
 
 ANSWER_HEADER = (
     "Je krijgt hieronder een gebruikersvraag en een set letterlijke citaten uit documenten. "
-    "Schrijf een uitgebreid, samenhangend antwoord voor een officier van justitie. "
+    "Schrijf een kort, samenhangend antwoord (4-7 zinnen) voor een officier van justitie. "
     "Gebruik alleen wat in de citaten staat. Geen speculatie. Geen informatie buiten de citaten. "
     "Verwijs in de lopende tekst kort naar documenttitel en paginanummer tussen haakjes, zoals (Titel, p. 12). "
     "Geen bulletlist tenzij noodzakelijk. Gewoon lopende tekst.\n\n"
@@ -65,6 +65,15 @@ def normalize_text(s: str) -> str:
     # Houd het simpel, verwijder exotische combinaties om CSV te sparen
     s = unicodedata.normalize("NFKC", s)
     return s.strip()
+
+def normalize_for_match(s: str) -> str:
+    if not isinstance(s, str):
+        return ""
+    t = unicodedata.normalize("NFKC", s)
+    t = t.replace("\u00A0", " ")
+    t = t.replace("“", '"').replace("”", '"').replace("’", "'").replace("‘", "'")
+    t = re.sub(r"\s+", " ", t)
+    return t.strip()
 
 def post_chat(messages, timeout=180, stream=False) -> str:
     """
@@ -593,10 +602,10 @@ def extract_citaten_from_dir(pdf_dir: str, vraag: str, hints: list | None = None
     alle = filter_kleine_ruis(dedup_citaten(alle))
     return alle
 
-def synthesize_answer(vraag: str, citaten: list) -> str:
+def synthesize_answer(vraag: str, citaten: list, max_chars: int = 3000) -> str:
     if not citaten:
         return "Er zijn geen relevante citaten gevonden voor deze vraag."
-    blok = chunk_text(citaten, max_chars=14000)
+    blok = chunk_text(citaten, max_chars=max_chars)
     prompt = build_answer_prompt(vraag, blok)
     ans = post_chat([{"role": "user", "content": prompt}], timeout=240, stream=False)
     return ans.strip()
@@ -608,12 +617,17 @@ def select_supporting_quotes(vraag: str, answer: str, citaten: list) -> list:
     prompt = build_select_prompt(vraag, answer, blok)
     raw = post_chat([{"role": "user", "content": prompt}], timeout=240, stream=False)
     gekozen = parse_jsonl(raw, pdf_name="")
-    if not gekozen:
-        # Back-up: neem een beknopte set
-        gekozen = citaten[:10]
-        for g in gekozen:
-            g.pop("document", None)
-    return gekozen
+    # Map selectie terug op geverifieerde citaten (voorkom hallucinatie)
+    index = {normalize_for_match(it["citaat"]): it for it in citaten}
+    enriched = []
+    for g in gekozen:
+        key = normalize_for_match(g.get("citaat", ""))
+        base = index.get(key)
+        if base:
+            enriched.append(base)
+    if not enriched:
+        enriched = citaten[:8]
+    return enriched
 
 def write_csv(csv_path: str, citaten: list, titel2doc: dict):
     # Kolomvolgorde: citaat, titel, document, pagina
@@ -682,19 +696,20 @@ def main(pdf_dir: str, vraag: str):
     for it in alle_citaten:
         titel2doc.setdefault(it["titel"], it["document"])
 
-    # 2) Antwoord voor terminal
-    antwoord = synthesize_answer(vraag, alle_citaten)
-
-    # 3) Selectie bewijscitaten
-    selectie = select_supporting_quotes(vraag, antwoord, alle_citaten)
+    # 2) Compact antwoord voor terminal (korte tekst)
+    concept = synthesize_answer(vraag, alle_citaten, max_chars=2000)
+    # 3) Selectie bewijscitaten voor antwoord (kleine set)
+    selectie = select_supporting_quotes(vraag, concept, alle_citaten)
+    # 3b) Definitief kort antwoord op basis van compacte selectie
+    antwoord = synthesize_answer(vraag, selectie, max_chars=1500)
     # herstel documentnaam waar nodig
     for it in selectie:
         if not it.get("document"):
             it["document"] = titel2doc.get(it.get("titel", ""), it.get("titel", ""))
 
-    # 4) CSV schrijven
+    # 4) CSV schrijven (uitgebreide lijst: alle geverifieerde citaten)
     csv_path = get_next_export_filename(pdf_dir, base_name="bewijscitaten", extension=".csv")
-    write_csv(csv_path, selectie, titel2doc)
+    write_csv(csv_path, alle_citaten, titel2doc)
 
     # 5) Terminal output
     print("\n=== ANTWOORD ===\n")
