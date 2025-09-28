@@ -79,6 +79,12 @@ def normalize_for_match(s: str) -> str:
     return s.strip()
 
 def post_chat(messages, timeout=180, stream=False) -> str:
+    sys_msg = {"role": "system", "content": "Antwoord uitsluitend in het Nederlands. Gebruik geen Engels."}
+    try:
+        if not messages or (isinstance(messages, list) and (not messages[0] or messages[0].get("role") != "system")):
+            messages = [sys_msg] + list(messages or [])
+    except Exception:
+        messages = [sys_msg]
     payload = {"model": MODEL_NAME, "messages": messages, "stream": stream}
     r = requests.post(API_URL, json=payload, timeout=timeout, stream=stream)
     r.raise_for_status()
