@@ -24,7 +24,6 @@ def query_llama(prompt):
     payload = {
         "model": MODEL_NAME,
         "prompt": prompt,
-        "system": "Beantwoord uitsluitend in het Nederlands. Gebruik geen Engels.",
         "max_tokens": 50,
     }
     try:
