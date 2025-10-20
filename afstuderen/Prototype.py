@@ -726,7 +726,7 @@ def main(pdf_dir: str, vraag: str):
 if __name__ == "__main__":
     # Pas deze twee aan
     PDF_DIR = os.getenv("PDF_DIR", "/Users/116299/Documents/Project_Afstuderen/test")
-    USER_QUERY = os.getenv("USER_QUERY", "Welke plaatsnamen worden genoemd en corresponderen zij met strafbare feiten?")
+    USER_QUERY = os.getenv("USER_QUERY", "Is er sprake van geweld en waar blijkt dat uit?")
     try:
         main(PDF_DIR, USER_QUERY)
     except KeyboardInterrupt:
