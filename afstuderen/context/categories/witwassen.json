@@ -1,0 +1,98 @@
+{
+  "id": "witwassen",
+  "label": "Witwassen",
+  "mapping_triggers": [
+    "witwassen", "contant geld", "cash", "grote cash", "onverklaarbaar vermogen", "money mule",
+    "geldezel", "katvanger", "stroman", "smurfen", "structurering", "hawala", "hundi",
+    "crypto cash-out", "mixen", "tumbler", "coinjoin", "chain hop", "P2P", "OTC broker",
+    "kasstortingen", "kasopnames", "funnel accounts", "shell company", "brievenbusfirma",
+    "TBML", "trade-based", "invoice scheme", "vals factureren"
+  ],
+  "ontology": [
+    {
+      "id": "witwassen_opzet",
+      "label": "Witwassen (opzet)",
+      "articles": ["Sr 420bis"],
+      "synonyms": [
+        "witgewassen geld", "verhullen herkomst", "doorstorten contanten", "cash-intensieve onderneming",
+        "kasstortingen", "contant omzetten", "smurfen", "gesplitste stortingen", "structureren",
+        "rondpompen gelden", "layering", "integratie", "hawala/hundi", "ondergronds bankieren",
+        "money mule netwerk", "geldezels", "katvangers", "stromannen",
+        "crypto-in cash-out", "overmaken via mixer", "coinjoin gebruikt",
+        "OTC-verkoper/broker", "P2P-handelsplatform", "LocalBitcoins-stijl",
+        "schijnleningen", "schijnconstructies", "vals factureren", "spookfacturen",
+        "contant aan- en verkopen", "onrealistische marges", "onverklaarbare rijkdom"
+      ],
+      "indicators": [
+        "omweg via derden", "stortingen net onder meldgrens", "patroon van kleine bedragen",
+        "gebruik van geldezels", "onverklaarbare kasstromen", "afwijkende facturen",
+        "cryptotransacties zonder legitieme herkomst", "snelle conversie crypto→cash of omgekeerd",
+        "korte houdperiode assets", "afwijkende levensstijl t.o.v. inkomen"
+      ]
+    },
+    {
+      "id": "schuldwitwassen",
+      "label": "Schuldwitwassen",
+      "articles": ["Sr 420quater"],
+      "synonyms": [
+        "had moeten vermoeden", "blind voor rode vlaggen", "onvoorzichtig met contanten",
+        "trail negeren", "onnodig risico bij geldstromen"
+      ],
+      "indicators": [
+        "kennelijk ongebruikelijke transacties genegeerd",
+        "geen plausibele verklaring", "weinig documentatie", "geen klantonderzoek"
+      ]
+    },
+    {
+      "id": "gewoontewitwassen",
+      "label": "Gewoontewitwassen",
+      "articles": ["Sr 420ter"],
+      "synonyms": [
+        "structureel witwassen", "patroon contante stortingen", "bedrijfsmatig witwassen",
+        "repeterende geldkanalen", "vaste geldezels", "multi-rekening netwerk"
+      ],
+      "indicators": [
+        "duur en frequentie transacties", "organisatiegraad", "meerdere rekeningen/personen",
+        "clustering rond vaste locaties", "steeds zelfde stortingsbedragen"
+      ]
+    },
+    {
+      "id": "tbml",
+      "label": "Trade-Based Money Laundering (TBML)",
+      "articles": ["Sr 225/326 (combi)"],
+      "synonyms": [
+        "handel gebaseerd witwassen", "over-onderfacturering", "misbruik import/export",
+        "schijnhandel", "spookcontainers", "paper trail zonder goederen",
+        "tegenfacturen", "overwaardering", "onderwaardering"
+      ],
+      "indicators": [
+        "facturen vs goederen mismatch", "vreemde prijszetting", "rondpompen via handelspartners",
+        "onlogische routes/logistiek"
+      ]
+    },
+    {
+      "id": "crypto_witwassen",
+      "label": "Crypto-gerelateerd witwassen",
+      "articles": ["Sr 420bis/ter/quater"],
+      "synonyms": [
+        "mixer", "tumbler", "coinjoin", "chain hop", "cross-chain bridge", "airdrops misbruikt",
+        "privacy coin", "XMR", "Monero", "Zcash", "shielded", "TOR wallet", "non-KYC exchange",
+        "no-KYC", "straw KYC", "synthetische identiteit", "sim-swapped exchange", "P2P escrow",
+        "OTC desk", "merchant tool misbruikt", "prepaid kaarten crypto",
+        "adres clustering", "peel chain", "dusting", "heuristics omzeilen"
+      ],
+      "indicators": [
+        "stortingen via mixers/tumblers", "veel short-lived wallets", "snelkeuzes tussen chains",
+        "DEX→CEX→cash out", "TRC20 USDT stroom naar P2P", "herhaalde coinjoin",
+        "receiving → peel → CEX patroon", "gebruik van privacy coins zonder legitieme reden"
+      ],
+      "regexes": {
+        "btc": "\\b(bc1|[13])[a-zA-HJ-NP-Z0-9]{25,39}\\b",
+        "eth": "\\b0x[a-fA-F0-9]{40}\\b",
+        "tron_trc20": "\\bT[1-9A-HJ-NP-Za-km-z]{33}\\b",
+        "monero": "\\b4[0-9AB][1-9A-HJ-NP-Za-km-z]{93}\\b"
+      }
+    }
+  ]
+}
+

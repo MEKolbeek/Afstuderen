@@ -1,0 +1,54 @@
+{
+  "id": "wapens",
+  "label": "Wapendelicten (WWM)",
+  "mapping_triggers": [
+    "wapen", "vuurwapen", "mes", "pistool", "revolver", "shotgun", "AK", "kalashnikov", "munitie",
+    "wapenhandel", "omgebouwd alarmpistool", "3d-geprint wapen", "ghost gun", "geluiddemper",
+    "silencer", "loop", "magazijn", "full auto", "switch", "glock switch", "buks", "luchtdrukwapen"
+  ],
+  "ontology": [
+    {
+      "id": "wapenbezit",
+      "label": "Wapenbezit",
+      "articles": ["WWM art. 13-26"],
+      "synonyms": [
+        "vuurwapen aangetroffen", "mes op zak", "stiletto", "boksbeugel", "ploertendoder",
+        "knipmes", "out-the-front", "zwaard", "machete", "bajonet", "pepperspray", "traangas",
+        "alarm-/startpistool echt gelijkend", "nepwapen echt gelijkend", "tasermes",
+        "geluiddemper", "suppressor", "red dot", "lasersight", "holster", "doorgeladen", "geladen magazijn"
+      ],
+      "indicators": [
+        "voorhanden hebben", "verborgen bergplaats", "compatibele munitie", "serienummer verwijderd",
+        "doorgeladen", "snelle toegang", "oefen- of schietoefeningen"
+      ]
+    },
+    {
+      "id": "wapenhandel",
+      "label": "Wapenhandel",
+      "articles": ["WWM art. 31"],
+      "synonyms": [
+        "wapens verhandelen", "doorverkopen", "omzetten", "ombouw alarmpistolen",
+        "ombouwset", "full auto sear", "switch", "upper/lower receivers", "lower 80%",
+        "3D-print wapens", "FGC-9", "homemade", "slamfire shotgun", "kits en onderdelen",
+        "kogelvrije vesten", "middenman", "tussenpersoon"
+      ],
+      "indicators": [
+        "serienummers weggeslepen", "ombouwhulpmiddelen", "bestellijsten", "typenummers in chats",
+        "logistiek en distributie van onderdelen", "internationale zendingen"
+      ]
+    },
+    {
+      "id": "munitie",
+      "label": "Munitie",
+      "articles": ["WWM art. 26"],
+      "synonyms": [
+        "dozen munitie", "9mm", "7.62", ".45 ACP", "hollow point", "FMJ", "knalpatronen",
+        "kogelkoppen", "slaghoedjes", "kruit", "hulzen", "laadtang", "pers voor munitie"
+      ],
+      "indicators": [
+        "verschillende kalibers", "geladen magazijnen", "herladen munitie", "compatibel met wapen"
+      ]
+    }
+  ]
+}
+

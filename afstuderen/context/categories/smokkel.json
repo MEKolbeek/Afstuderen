@@ -1,0 +1,40 @@
+{
+  "id": "smokkel",
+  "label": "Smokkel en accijns",
+  "mapping_triggers": [
+    "smokkel", "illegale sigaretten", "accijns", "shisha tabak", "tabak zonder banderol",
+    "illegale alcohol", "brandstof", "uithalers", "container", "douane", "illegale import",
+    "grensoverschrijdend vervoer", "illicit whites", "Chinese whites", "illicit tobacco"
+  ],
+  "ontology": [
+    {
+      "id": "accijns_smokkel",
+      "label": "Smokkel accijnsgoederen",
+      "articles": ["Wet op de Accijns"],
+      "synonyms": [
+        "illegale sigaretten", "ongebanderolleerde tabak", "illegale alcohol", "illegale shisha",
+        "accijnsfraude", "shag zonder banderol", "diesel accijns ontduikt",
+        "illicit whites", "contrabande tabak", "poolse sigaretten", "merkloze whites"
+      ],
+      "indicators": [
+        "zonder banderol", "vervalste banderollen", "grote partijen in opslag", "douane vangst",
+        "logistieke sporen magazijn/loods", "verhulling tussen legale lading"
+      ]
+    },
+    {
+      "id": "mensensmokkel",
+      "label": "Mensensmokkel",
+      "articles": ["Sr 197a"],
+      "synonyms": [
+        "illegaal transporteren personen", "grensovergang faciliteren", "human smuggling",
+        "bootjes overzetten", "chauffeur met migranten", "safehouses", "routes via vrachtwagens",
+        "valse visa", "valse stempels", "transit via derde landen"
+      ],
+      "indicators": [
+        "betaalde trajecten", "valse documenten", "risicovolle overtochten", "afspraken met koeriers",
+        "opvanglocaties", "gespreide reizen en groepen"
+      ]
+    }
+  ]
+}
+

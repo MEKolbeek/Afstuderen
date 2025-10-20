@@ -1,0 +1,29 @@
+{
+  "phrase_window_chars": 300,
+  "negations": [
+    "geen",
+    "niet",
+    "ontkent",
+    "kan niet worden vastgesteld",
+    "geen aanwijzingen voor",
+    "niet gebleken",
+    "weerspreekt",
+    "werd niet gezien",
+    "niet van toepassing",
+    "zonder resultaat"
+  ],
+  "entities": {
+    "victim_markers": ["aangever", "aangeefster", "slachtoffer", "benadeelde", "melder", "doelwit", "benadeelde partij"],
+    "suspect_markers": ["verdachte", "medeverdachte", "dader", "pleger", "initiatiefnemer", "betrokkene", "bestuurder", "koerier"],
+    "location_markers": ["op", "in", "bij", "te", "adres", "straat", "plein", "station", "woning", "café", "horeca", "parkeerplaats", "bedrijventerrein", "loods", "garagebox"],
+    "time_markers": ["op", "om", "datum", "tijdstip", "uur", "dag", "avond", "nacht", "weekend", "vannacht", "gisteravond"],
+    "document_markers": ["aangifte", "proces-verbaal", "PV", "verklaring", "waarneming", "observatie", "tapgesprek", "getuige", "FO", "NFI", "CIE"]
+  },
+  "evidence_heuristics": {
+    "require_quote": true,
+    "prefer_multi_source": true,
+    "max_quotes_per_offense": 10,
+    "min_quote_len": 20
+  }
+}
+

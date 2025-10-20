@@ -1,0 +1,53 @@
+{
+  "id": "diefstal",
+  "label": "Diefstal en heling",
+  "mapping_triggers": [
+    "diefstal", "gestolen", "ontvreemd", "wegnemen", "toegeëigend", "inbraak", "braak",
+    "insluiping", "ramkraak", "snelkraak", "woninginbraak", "auto-inbraak", "zakkenrollen",
+    "winkeldiefstal", "heling", "opzetheling", "schuldheling", "overval", "beroving"
+  ],
+  "ontology": [
+    {
+      "id": "diefstal",
+      "label": "Diefstal",
+      "articles": ["Sr 310"],
+      "synonyms": [
+        "weggenomen", "gestolen", "ontvreemd", "toegeëigend", "zonder toestemming meegenomen",
+        "in bezit genomen", "shoplift", "wegnemen uit voertuig", "tas gestolen", "portemonnee weg",
+        "fietsdiefstal", "wegnemen goederen"
+      ],
+      "indicators": [
+        "toebehoort aan een ander", "opzet op wederrechtelijke toe-eigening", "verhullend gedrag",
+        "vluchten met buit", "bewaring van gestolen goed"
+      ]
+    },
+    {
+      "id": "gekwalificeerde_diefstal",
+      "label": "Diefstal met braak/inklimming/omlijsting",
+      "articles": ["Sr 311"],
+      "synonyms": [
+        "braak", "inklimming", "valse sleutel", "rolluik opengebroken", "ruit ingeslagen",
+        "cilinder getrokken", "snelkraak", "ramkraak", "braaksporen", "slot geforceerd",
+        "glazen deur vernield", "lockpicken", "sleutelkloppen"
+      ],
+      "indicators": [
+        "sporen van braak", "werktuigen", "nachtelijk tijdstip", "in vereniging", "voertuig als ram"
+      ]
+    },
+    {
+      "id": "heling",
+      "label": "Heling",
+      "articles": ["Sr 416-417bis"],
+      "synonyms": [
+        "opzetheling", "schuldheling", "gestolen goed doorverkopen", "telefoons helen",
+        "fietsen helen", "sieraden helen", "partijen goederen zonder bon", "buit doorverkocht",
+        "serienummers weggehaald", "IMEI gemanipuleerd"
+      ],
+      "indicators": [
+        "onwaarschijnlijke prijs", "weggehaalde serienummers", "bulkpartijen gemixt",
+        "geen herkomst", "contact met veel verschillende kopers/verkopers"
+      ]
+    }
+  ]
+}
+
